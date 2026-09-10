@@ -4,15 +4,17 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/Toast";
 import { CategoryIcon, ICON_OPTIONS } from "@/components/CategoryIcon";
-import type { CategoryDTO } from "@/lib/types";
+import type { CategoryDTO, TodoCategoryDTO } from "@/lib/types";
 
 export const CATEGORY_COLOR_OPTIONS = ["#8B3A3A", "#B76E79", "#C9A227", "#7B4B94", "#4B6858"];
 
-export function AddCategoryForm({
+export function AddCategoryForm<T extends CategoryDTO | TodoCategoryDTO = CategoryDTO>({
+  endpoint = "/api/categories",
   onCreated,
   submitLabel = "Add category",
 }: {
-  onCreated: (category: CategoryDTO) => void;
+  endpoint?: string;
+  onCreated: (category: T) => void;
   submitLabel?: string;
 }) {
   const { showToast } = useToast();
@@ -29,7 +31,7 @@ export function AddCategoryForm({
 
     setSaving(true);
     try {
-      const res = await fetch("/api/categories", {
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: name.trim(), icon, color }),
@@ -38,7 +40,7 @@ export function AddCategoryForm({
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Failed to add category");
       }
-      const created = await res.json();
+      const created = (await res.json()) as T;
       onCreated(created);
       showToast("Category added");
       setName("");

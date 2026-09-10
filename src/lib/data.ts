@@ -3,8 +3,10 @@ import { connectToDatabase } from "@/lib/mongodb";
 import { Category } from "@/models/Category";
 import { Expense } from "@/models/Expense";
 import { User } from "@/models/User";
+import { TodoCategory } from "@/models/TodoCategory";
+import { TodoItem } from "@/models/TodoItem";
 import { serialize } from "@/lib/serialize";
-import type { CategoryDTO, ExpenseDTO } from "@/lib/types";
+import type { CategoryDTO, ExpenseDTO, TodoCategoryDTO, TodoItemDTO } from "@/lib/types";
 
 export async function getCategoriesForUser(userId: string): Promise<CategoryDTO[]> {
   await connectToDatabase();
@@ -44,4 +46,44 @@ export async function getExpenseById(userId: string, expenseId: string): Promise
   const expense = await Expense.findOne({ _id: expenseId, userId }).lean();
   if (!expense) return null;
   return serialize(expense) as unknown as ExpenseDTO;
+}
+
+export async function getTodoCategoriesForUser(userId: string): Promise<TodoCategoryDTO[]> {
+  await connectToDatabase();
+  const categories = await TodoCategory.find({ userId }).sort({ createdAt: 1 }).lean();
+  return serialize(categories) as unknown as TodoCategoryDTO[];
+}
+
+export async function getTodoCategoryById(
+  userId: string,
+  todoCategoryId: string
+): Promise<TodoCategoryDTO | null> {
+  if (!isValidObjectId(todoCategoryId)) return null;
+  await connectToDatabase();
+  const category = await TodoCategory.findOne({ _id: todoCategoryId, userId }).lean();
+  if (!category) return null;
+  return serialize(category) as unknown as TodoCategoryDTO;
+}
+
+export async function getTodosForUser(userId: string): Promise<TodoItemDTO[]> {
+  await connectToDatabase();
+  const todos = await TodoItem.find({ userId }).sort({ createdAt: -1 }).lean();
+  return serialize(todos) as unknown as TodoItemDTO[];
+}
+
+export async function getTodosForCategory(
+  userId: string,
+  todoCategoryId: string
+): Promise<TodoItemDTO[]> {
+  await connectToDatabase();
+  const todos = await TodoItem.find({ userId, todoCategoryId }).sort({ createdAt: -1 }).lean();
+  return serialize(todos) as unknown as TodoItemDTO[];
+}
+
+export async function getTodoById(userId: string, todoId: string): Promise<TodoItemDTO | null> {
+  if (!isValidObjectId(todoId)) return null;
+  await connectToDatabase();
+  const todo = await TodoItem.findOne({ _id: todoId, userId }).lean();
+  if (!todo) return null;
+  return serialize(todo) as unknown as TodoItemDTO;
 }

@@ -23,3 +23,24 @@ export type ExpenseDTO = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type TodoCategoryDTO = {
+  _id: string;
+  userId: string;
+  name: string;
+  icon: string;
+  color: string;
+  createdAt: string;
+};
+
+export type TodoItemDTO = {
+  _id: string;
+  userId: string;
+  todoCategoryId: string;
+  title: string;
+  notes?: string;
+  status: ExpenseStatus;
+  dueDate?: string;
+  createdAt: string;
+  updatedAt: string;
+};
