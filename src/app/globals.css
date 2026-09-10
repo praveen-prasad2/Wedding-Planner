@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+:root {
+  --background: #fbf6f1;
+  --foreground: #3a2a2a;
+  --card: #ffffff;
+  --border: #ecdfd6;
+  --muted: #8a7a72;
+  --blush: #f3dfe2;
+  --blush-dark: #b76e79;
+  --gold: #c9a227;
+  --gold-light: #f4e8c1;
+  --maroon: #7a2e2e;
+  --maroon-dark: #5c2020;
+  --cream: #fbf6f1;
+  --success: #4b6858;
+  --success-light: #dcebe2;
+  --pending: #b76e79;
+  --pending-light: #f3dfe2;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-blush: var(--blush);
+  --color-blush-dark: var(--blush-dark);
+  --color-gold: var(--gold);
+  --color-gold-light: var(--gold-light);
+  --color-maroon: var(--maroon);
+  --color-maroon-dark: var(--maroon-dark);
+  --color-cream: var(--cream);
+  --color-success: var(--success);
+  --color-success-light: var(--success-light);
+  --color-pending: var(--pending);
+  --color-pending-light: var(--pending-light);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+input,
+select,
+textarea {
+  font-size: 16px;
+}
